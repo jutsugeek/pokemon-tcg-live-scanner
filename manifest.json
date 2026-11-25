@@ -1,6 +1,7 @@
 {
   "name": "Scanner Códigos TCG Live - Jutsu Geek",
   "short_name": "TCG Scanner",
+  "description": "Scanner de códigos Pokémon TCG Live para Jutsu Geek",
   "start_url": "/pokemon-tcg-live-scanner/",
   "scope": "/pokemon-tcg-live-scanner/",
   "display": "standalone",
@@ -11,13 +12,13 @@
       "src": "icon.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
