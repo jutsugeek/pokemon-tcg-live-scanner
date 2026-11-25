@@ -8,97 +8,28 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Scanner Códigos TCG Live - Jutsu Geek</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icon.png" type="image/png">
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #0f172a;
-      color: #f1f5f9;
-      min-height: 100vh;
-      padding: 12px;
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 12px;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f1f5f9; min-height: 100vh; padding: 12px; }
+    .header { text-align: center; margin-bottom: 12px; }
     .header h1 { font-size: 1.4rem; color: #38bdf8; }
     .header p { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
-    .config {
-      background: #1e293b;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-    }
+    .config { background: #1e293b; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
     .config label { display: block; font-size: 0.9rem; margin-bottom: 6px; color: #cbd5e1; }
-    select, input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      background: #0f172a;
-      color: #f1f5f9;
-      font-size: 1rem;
-    }
-    .scanner-container {
-      background: #1e293b;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
+    select, input[type="text"] { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #f1f5f9; font-size: 1rem; }
+    .scanner-container { background: #1e293b; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
     #reader { width: 100%; }
-    .status {
-      text-align: center;
-      padding: 8px;
-      font-size: 0.9rem;
-      color: #94a3b8;
-    }
-    .toast {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #22c55e;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      z-index: 1000;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-      max-width: 90%;
-      text-align: center;
-    }
+    .status { text-align: center; padding: 8px; font-size: 0.9rem; color: #94a3b8; }
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #22c55e; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; z-index: 1000; opacity: 0; transition: opacity 0.3s; pointer-events: none; max-width: 90%; text-align: center; }
     .toast.show { opacity: 1; }
     .toast.error { background: #ef4444; }
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-    }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 8px; }
     .btn-primary { background: #38bdf8; color: #0f172a; }
     .btn-secondary { background: #334155; color: #f1f5f9; }
-    .last-codes {
-      background: #1e293b;
-      border-radius: 12px;
-      padding: 12px;
-      max-height: 200px;
-      overflow-y: auto;
-    }
+    .last-codes { background: #1e293b; border-radius: 12px; padding: 12px; max-height: 200px; overflow-y: auto; }
     .last-codes h3 { font-size: 0.95rem; margin-bottom: 8px; color: #cbd5e1; }
-    .code-item {
-      font-size: 0.85rem;
-      padding: 6px 0;
-      border-bottom: 1px solid #334155;
-      word-break: break-all;
-    }
+    .code-item { font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid #334155; word-break: break-all; }
     .code-item:last-child { border: none; }
     .hidden { display: none; }
   </style>
@@ -108,11 +39,9 @@
     <h1>Scanner Códigos TCG Live</h1>
     <p>Jutsu Geek — Escaneie e salve na planilha</p>
   </div>
-
   <div class="config">
     <label for="appsScriptUrl">URL do Apps Script (Web App)</label>
     <input type="text" id="appsScriptUrl" placeholder="Cole aqui a URL do Web App do Google Apps Script">
-    
     <label for="colecao" style="margin-top:12px">Coleção</label>
     <select id="colecao">
       <option value="Delta Reign">Delta Reign</option>
@@ -139,29 +68,23 @@
     </select>
     <input type="text" id="colecaoCustom" placeholder="Nome da coleção personalizada" class="hidden" style="margin-top:8px">
   </div>
-
   <div class="scanner-container">
     <div id="reader"></div>
     <div class="status" id="status">Aguardando câmera...</div>
   </div>
-
   <button class="btn btn-primary" id="startBtn">Iniciar Câmera</button>
   <button class="btn btn-secondary hidden" id="stopBtn">Parar Câmera</button>
-
   <div class="last-codes" style="margin-top:12px">
     <h3>Últimos códigos escaneados (sessão)</h3>
     <div id="lastCodesList">Nenhum ainda</div>
   </div>
-
   <div class="toast" id="toast"></div>
-
   <script>
     const APPS_SCRIPT_KEY = 'tcgl_apps_script_url';
     let html5QrCode = null;
     let isScanning = false;
     let lastScanned = '';
     let scanCooldown = false;
-
     const colecaoSelect = document.getElementById('colecao');
     const colecaoCustom = document.getElementById('colecaoCustom');
     const appsScriptInput = document.getElementById('appsScriptUrl');
@@ -170,122 +93,74 @@
     const lastCodesList = document.getElementById('lastCodesList');
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
-
     appsScriptInput.value = localStorage.getItem(APPS_SCRIPT_KEY) || '';
-    appsScriptInput.addEventListener('change', () => {
-      localStorage.setItem(APPS_SCRIPT_KEY, appsScriptInput.value.trim());
-    });
-
+    appsScriptInput.addEventListener('change', () => { localStorage.setItem(APPS_SCRIPT_KEY, appsScriptInput.value.trim()); });
     colecaoSelect.addEventListener('change', () => {
-      if (colecaoSelect.value === 'Outro') {
-        colecaoCustom.classList.remove('hidden');
-      } else {
-        colecaoCustom.classList.add('hidden');
-      }
+      if (colecaoSelect.value === 'Outro') colecaoCustom.classList.remove('hidden');
+      else colecaoCustom.classList.add('hidden');
     });
-
     function getColecao() {
-      if (colecaoSelect.value === 'Outro') {
-        return colecaoCustom.value.trim() || 'Outro';
-      }
-      return colecaoSelect.value;
+      return colecaoSelect.value === 'Outro' ? (colecaoCustom.value.trim() || 'Outro') : colecaoSelect.value;
     }
-
     function showToast(message, isError = false) {
       toast.textContent = message;
       toast.className = 'toast show' + (isError ? ' error' : '');
-      setTimeout(() => {
-        toast.className = 'toast';
-      }, 1800);
+      setTimeout(() => { toast.className = 'toast'; }, 1800);
     }
-
     function addToLastCodes(code, colecao) {
       const item = document.createElement('div');
       item.className = 'code-item';
-      item.textContent = `${code} — ${colecao}`;
-      if (lastCodesList.textContent === 'Nenhum ainda') {
-        lastCodesList.innerHTML = '';
-      }
+      item.textContent = code + ' — ' + colecao;
+      if (lastCodesList.textContent === 'Nenhum ainda') lastCodesList.innerHTML = '';
       lastCodesList.prepend(item);
-      while (lastCodesList.children.length > 10) {
-        lastCodesList.removeChild(lastCodesList.lastChild);
-      }
+      while (lastCodesList.children.length > 10) lastCodesList.removeChild(lastCodesList.lastChild);
     }
-
     async function saveToSheet(code, colecao) {
       const url = appsScriptInput.value.trim();
-      if (!url) {
-        showToast('Configure a URL do Apps Script primeiro!', true);
-        return false;
-      }
-
-      const payload = {
-        codigo: code,
-        colecao: colecao,
-        timestamp: new Date().toISOString()
-      };
-
+      if (!url) { showToast('Configure a URL do Apps Script primeiro!', true); return false; }
+      const formData = new URLSearchParams();
+      formData.append('codigo', code);
+      formData.append('colecao', colecao);
+      formData.append('timestamp', new Date().toISOString());
       try {
         await fetch(url, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData.toString()
         });
         return true;
       } catch (err) {
-        console.error(err);
-        showToast('Erro ao salvar na planilha: ' + err.message, true);
+        showToast('Erro ao salvar: ' + err.message, true);
         return false;
       }
     }
-
     async function onScanSuccess(decodedText) {
       if (scanCooldown || !isScanning) return;
       const code = decodedText.trim().toUpperCase();
       if (!code || code === lastScanned) return;
-
       scanCooldown = true;
       lastScanned = code;
-
       const colecao = getColecao();
       statusEl.textContent = 'Salvando...';
-
       const saved = await saveToSheet(code, colecao);
       if (saved) {
-        showToast(`✓ Salvo: ${code}`);
+        showToast('✓ Salvo: ' + code);
         addToLastCodes(code, colecao);
         statusEl.textContent = 'Pronto para o próximo!';
       } else {
-        statusEl.textContent = 'Falha ao salvar. Tente novamente.';
+        statusEl.textContent = 'Falha ao salvar.';
       }
-
-      setTimeout(() => {
-        scanCooldown = false;
-        lastScanned = '';
-      }, 1500);
+      setTimeout(() => { scanCooldown = false; lastScanned = ''; }, 1500);
     }
-
-    function onScanFailure(error) {}
-
+    function onScanFailure() {}
     async function startScanner() {
       if (isScanning) return;
       const url = appsScriptInput.value.trim();
-      if (!url) {
-        showToast('Cole a URL do Apps Script primeiro!', true);
-        return;
-      }
-
-      html5QrCode = new Html5Qrcode("reader");
-      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-
+      if (!url) { showToast('Cole a URL do Apps Script primeiro!', true); return; }
+      html5QrCode = new Html5Qrcode('reader');
       try {
-        await html5QrCode.start(
-          { facingMode: "environment" },
-          config,
-          onScanSuccess,
-          onScanFailure
-        );
+        await html5QrCode.start({ facingMode: 'environment' }, { fps: 10, qrbox: { width: 250, height: 250 } }, onScanSuccess, onScanFailure);
         isScanning = true;
         statusEl.textContent = 'Aponte para o QR do código...';
         startBtn.classList.add('hidden');
@@ -295,7 +170,6 @@
         showToast('Permita o acesso à câmera', true);
       }
     }
-
     async function stopScanner() {
       if (html5QrCode && isScanning) {
         await html5QrCode.stop();
@@ -306,13 +180,9 @@
         stopBtn.classList.add('hidden');
       }
     }
-
     startBtn.addEventListener('click', startScanner);
     stopBtn.addEventListener('click', stopScanner);
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
-    }
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
   </script>
 </body>
 </html>
