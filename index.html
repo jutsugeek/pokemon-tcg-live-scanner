@@ -11,25 +11,64 @@
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f1f5f9; min-height: 100vh; padding: 12px; }
-    .header { text-align: center; margin-bottom: 12px; }
-    .header h1 { font-size: 1.4rem; color: #38bdf8; }
-    .header p { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
-    .config { background: #1e293b; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
-    .config label { display: block; font-size: 0.9rem; margin-bottom: 6px; color: #cbd5e1; }
-    select, input[type="text"] { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #f1f5f9; font-size: 1rem; }
-    .scanner-container { background: #1e293b; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
-    #reader { width: 100%; }
-    .status { text-align: center; padding: 8px; font-size: 0.9rem; color: #94a3b8; }
-    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #22c55e; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; z-index: 1000; opacity: 0; transition: opacity 0.3s; pointer-events: none; max-width: 90%; text-align: center; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+      color: #f1f5f9;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .header { text-align: center; margin-bottom: 20px; }
+    .header h1 { 
+      font-size: 1.6rem; 
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+    .header p { font-size: 0.9rem; color: #94a3b8; margin-top: 6px; }
+    .config, .scanner-container, .last-codes {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .config label { display: block; font-size: 0.9rem; margin-bottom: 8px; color: #cbd5e1; font-weight: 500; }
+    select, input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #f1f5f9;
+      font-size: 1rem;
+      outline: none;
+    }
+    select:focus, input:focus { border-color: #38bdf8; }
+    #reader { width: 100%; border-radius: 12px; overflow: hidden; }
+    .status { text-align: center; padding: 10px; font-size: 0.95rem; color: #94a3b8; }
+    .toast {
+      position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+      background: #22c55e; color: white; padding: 14px 24px; border-radius: 12px;
+      font-weight: 600; z-index: 1000; opacity: 0; transition: opacity 0.3s;
+      pointer-events: none; max-width: 90%; text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
     .toast.show { opacity: 1; }
     .toast.error { background: #ef4444; }
-    .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 8px; }
-    .btn-primary { background: #38bdf8; color: #0f172a; }
+    .btn {
+      width: 100%; padding: 14px; border: none; border-radius: 12px;
+      font-size: 1.05rem; font-weight: 600; cursor: pointer; margin-top: 8px;
+      transition: transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: linear-gradient(90deg, #38bdf8, #0ea5e9); color: #0f172a; }
     .btn-secondary { background: #334155; color: #f1f5f9; }
-    .last-codes { background: #1e293b; border-radius: 12px; padding: 12px; max-height: 200px; overflow-y: auto; }
-    .last-codes h3 { font-size: 0.95rem; margin-bottom: 8px; color: #cbd5e1; }
-    .code-item { font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid #334155; word-break: break-all; }
+    .last-codes h3 { font-size: 1rem; margin-bottom: 10px; color: #cbd5e1; }
+    .code-item { font-size: 0.9rem; padding: 8px 0; border-bottom: 1px solid #334155; word-break: break-all; }
     .code-item:last-child { border: none; }
     .hidden { display: none; }
   </style>
@@ -74,7 +113,7 @@
   </div>
   <button class="btn btn-primary" id="startBtn">Iniciar Câmera</button>
   <button class="btn btn-secondary hidden" id="stopBtn">Parar Câmera</button>
-  <div class="last-codes" style="margin-top:12px">
+  <div class="last-codes">
     <h3>Últimos códigos escaneados (sessão)</h3>
     <div id="lastCodesList">Nenhum ainda</div>
   </div>
