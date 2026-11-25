@@ -81,9 +81,10 @@
   <div class="toast" id="toast"></div>
   <script>
     const APPS_SCRIPT_KEY = 'tcgl_apps_script_url';
+    const SCANNED_KEY = 'tcgl_scanned_codes';
+    let scannedCodes = new Set(JSON.parse(localStorage.getItem(SCANNED_KEY) || '[]'));
     let html5QrCode = null;
     let isScanning = false;
-    let lastScanned = '';
     let scanCooldown = false;
     const colecaoSelect = document.getElementById('colecao');
     const colecaoCustom = document.getElementById('colecaoCustom');
@@ -115,6 +116,13 @@
       lastCodesList.prepend(item);
       while (lastCodesList.children.length > 10) lastCodesList.removeChild(lastCodesList.lastChild);
     }
+    function markAsScanned(code) {
+      scannedCodes.add(code);
+      localStorage.setItem(SCANNED_KEY, JSON.stringify([...scannedCodes]));
+    }
+    function isAlreadyScanned(code) {
+      return scannedCodes.has(code);
+    }
     async function saveToSheet(code, colecao) {
       const url = appsScriptInput.value.trim();
       if (!url) { showToast('Configure a URL do Apps Script primeiro!', true); return false; }
@@ -138,20 +146,27 @@
     async function onScanSuccess(decodedText) {
       if (scanCooldown || !isScanning) return;
       const code = decodedText.trim().toUpperCase();
-      if (!code || code === lastScanned) return;
+      if (!code) return;
+      if (isAlreadyScanned(code)) {
+        showToast('Código já escaneado! Tente outro cartão', true);
+        statusEl.textContent = 'Código duplicado';
+        scanCooldown = true;
+        setTimeout(() => { scanCooldown = false; }, 2000);
+        return;
+      }
       scanCooldown = true;
-      lastScanned = code;
       const colecao = getColecao();
       statusEl.textContent = 'Salvando...';
       const saved = await saveToSheet(code, colecao);
       if (saved) {
+        markAsScanned(code);
         showToast('✓ Salvo: ' + code);
         addToLastCodes(code, colecao);
         statusEl.textContent = 'Pronto para o próximo!';
       } else {
         statusEl.textContent = 'Falha ao salvar.';
       }
-      setTimeout(() => { scanCooldown = false; lastScanned = ''; }, 1500);
+      setTimeout(() => { scanCooldown = false; }, 1500);
     }
     function onScanFailure() {}
     async function startScanner() {
