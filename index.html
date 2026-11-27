@@ -103,13 +103,7 @@
     const APPS_SCRIPT_KEY = 'tcgl_apps_script_url';
     const SCANNED_KEY = 'tcgl_scanned_codes';
     const COLLECTIONS_KEY = 'tcgl_collections';
-    const DEFAULT_COLLECTIONS = [
-      'Delta Reign', '30th Celebration', 'Pitch Black', 'Chaos Rising',
-      'Perfect Order', 'Ascended Heroes', 'Phantasmal Flames', 'Mega Evolution',
-      'Black Bolt', 'White Flare', 'Destined Rivals', 'Journey Together',
-      'Prismatic Evolutions', 'Surging Sparks', 'Stellar Crown', 'Shrouded Fable',
-      'Twilight Masquerade', 'Temporal Forces', 'Paldean Fates', 'Paradox Rift'
-    ];
+    const DEFAULT_COLLECTIONS = ['Delta Reign'];
     let scannedCodes = new Set(JSON.parse(localStorage.getItem(SCANNED_KEY) || '[]'));
     let html5QrCode = null;
     let isScanning = false;
@@ -140,9 +134,32 @@
         colecaoSelect.appendChild(opt);
       });
     }
+    async function loadCollectionsFromSheet() {
+      const url = appsScriptInput.value.trim();
+      if (!url) return;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.collections && data.collections.length) {
+          colecaoSelect.innerHTML = '';
+          data.collections.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            colecaoSelect.appendChild(opt);
+          });
+        }
+      } catch (err) {
+        console.error('Erro ao carregar coleções', err);
+      }
+    }
     populateCollections();
     appsScriptInput.value = localStorage.getItem(APPS_SCRIPT_KEY) || '';
-    appsScriptInput.addEventListener('change', () => { localStorage.setItem(APPS_SCRIPT_KEY, appsScriptInput.value.trim()); });
+    appsScriptInput.addEventListener('change', () => {
+      localStorage.setItem(APPS_SCRIPT_KEY, appsScriptInput.value.trim());
+      loadCollectionsFromSheet();
+    });
+    loadCollectionsFromSheet();
     addColecaoBtn.addEventListener('click', () => {
       const name = novaColecaoInput.value.trim();
       if (!name) return;
