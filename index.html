@@ -138,10 +138,10 @@
       const url = appsScriptInput.value.trim();
       if (!url) return;
       try {
-        const res = await fetch(url, { method: 'GET', redirect: 'follow' });
+        const res = await fetch(url + '?nocache=' + Date.now(), { method: 'GET', redirect: 'follow' });
         const text = await res.text();
         const data = JSON.parse(text);
-        if (data.collections && Array.isArray(data.collections) && data.collections.length) {
+        if (data.collections && data.collections.length) {
           colecaoSelect.innerHTML = '';
           data.collections.forEach(name => {
             const opt = document.createElement('option');
@@ -149,10 +149,10 @@
             opt.textContent = name;
             colecaoSelect.appendChild(opt);
           });
-          showToast('Coleções carregadas');
+          showToast('Coleções carregadas da planilha');
         }
       } catch (err) {
-        console.error(err);
+        console.error('Erro ao carregar coleções:', err);
       }
     }
     populateCollections();
