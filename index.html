@@ -138,11 +138,10 @@
       const url = appsScriptInput.value.trim();
       if (!url) return;
       try {
-        const res = await fetch(url, { redirect: 'follow' });
+        const res = await fetch(url, { method: 'GET', redirect: 'follow' });
         const text = await res.text();
-        let data;
-        try { data = JSON.parse(text); } catch { return; }
-        if (data.collections && data.collections.length) {
+        const data = JSON.parse(text);
+        if (data.collections && Array.isArray(data.collections) && data.collections.length) {
           colecaoSelect.innerHTML = '';
           data.collections.forEach(name => {
             const opt = document.createElement('option');
@@ -150,9 +149,10 @@
             opt.textContent = name;
             colecaoSelect.appendChild(opt);
           });
+          showToast('Coleções carregadas');
         }
       } catch (err) {
-        console.error('Erro ao carregar coleções', err);
+        console.error(err);
       }
     }
     populateCollections();
