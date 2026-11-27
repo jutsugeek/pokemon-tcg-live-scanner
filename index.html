@@ -138,8 +138,10 @@
       const url = appsScriptInput.value.trim();
       if (!url) return;
       try {
-        const res = await fetch(url);
-        const data = await res.json();
+        const res = await fetch(url, { redirect: 'follow' });
+        const text = await res.text();
+        let data;
+        try { data = JSON.parse(text); } catch { return; }
         if (data.collections && data.collections.length) {
           colecaoSelect.innerHTML = '';
           data.collections.forEach(name => {
